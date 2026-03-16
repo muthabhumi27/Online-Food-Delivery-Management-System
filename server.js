@@ -171,8 +171,8 @@ app.get('/api/q3-popular-items', async (req, res) => {
     try { res.json(await query(sql)); } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Q4 — Most Active Customers This Month (via VIEW)
-//      Concepts: CREATE VIEW, DATE_SUB, CURDATE, SUM, COUNT, ORDER BY
+// Q4 — Most Active Customers in February 2026 (via VIEW)
+//      Concepts: CREATE VIEW, DATE_FORMAT, COUNT, SUM, GROUP BY, ORDER BY
 app.get('/api/q4-loyalty-segments', async (req, res) => {
     try {
         await query(`
@@ -187,14 +187,15 @@ app.get('/api/q4-loyalty-segments', async (req, res) => {
                 GROUP BY c.CustomerID, c.CustomerName`);
         const rows = await query(`
             SELECT c.CustomerName,
-                   COUNT(o.OrderID)                        AS OrdersThisMonth,
-                   SUM(oi.Quantity * oi.ItemPrice)         AS MonthlySpend,
-                   MAX(o.OrderDate)                        AS LastOrderDate
+                   COUNT(o.OrderID)                              AS OrdersThisMonth,
+                   SUM(oi.Quantity * oi.ItemPrice)               AS MonthlySpend,
+                   DATE_FORMAT(MAX(o.OrderDate), '%d %b %Y')     AS LastOrderDate
             FROM CustomerOrderSummary cos
-            JOIN Customer c    ON cos.CustomerID = c.CustomerID
-            JOIN \`Order\` o   ON c.CustomerID   = o.CustomerID
-            JOIN OrderItem oi  ON o.OrderID      = oi.OrderID
-            WHERE o.OrderDate >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+            JOIN Customer  c  ON cos.CustomerID = c.CustomerID
+            JOIN \`Order\`  o  ON c.CustomerID  = o.CustomerID
+            JOIN OrderItem oi ON o.OrderID      = oi.OrderID
+            WHERE o.OrderDate >= '2026-02-01'
+              AND o.OrderDate <  '2026-03-01'
               AND o.OrderStatus != 'Cancelled'
             GROUP BY c.CustomerID, c.CustomerName
             ORDER BY OrdersThisMonth DESC, MonthlySpend DESC`);
@@ -279,19 +280,20 @@ app.get('/api/adv/q3', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// adv/q4 — most active customers this month from VIEW
+// adv/q4 — most active customers in February 2026 from VIEW
 app.get('/api/adv/q4', async (req, res) => {
     try {
         const rows = await query(`
             SELECT c.CustomerName,
-                   COUNT(o.OrderID)                AS OrdersThisMonth,
-                   SUM(oi.Quantity * oi.ItemPrice) AS MonthlySpend,
-                   MAX(o.OrderDate)                AS LastOrderDate
+                   COUNT(o.OrderID)                              AS OrdersThisMonth,
+                   SUM(oi.Quantity * oi.ItemPrice)               AS MonthlySpend,
+                   DATE_FORMAT(MAX(o.OrderDate), '%d %b %Y')     AS LastOrderDate
             FROM CustomerOrderSummary cos
-            JOIN Customer c   ON cos.CustomerID = c.CustomerID
-            JOIN \`Order\` o  ON c.CustomerID   = o.CustomerID
+            JOIN Customer  c  ON cos.CustomerID = c.CustomerID
+            JOIN \`Order\`  o  ON c.CustomerID  = o.CustomerID
             JOIN OrderItem oi ON o.OrderID      = oi.OrderID
-            WHERE o.OrderDate >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+            WHERE o.OrderDate >= '2026-02-01'
+              AND o.OrderDate <  '2026-03-01'
               AND o.OrderStatus != 'Cancelled'
             GROUP BY c.CustomerID, c.CustomerName
             ORDER BY OrdersThisMonth DESC, MonthlySpend DESC`);
@@ -317,7 +319,9 @@ app.get('/api/adv/q5', async (req, res) => {
 });
 
 // Fallback — serve index.html for any unmatched route
-app.get('/{*path}', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.listen(3000, () => {
     console.log('\n🚀 FoodRush running → http://localhost:3000');
