@@ -1121,16 +1121,26 @@ function buildTable(qid,data){
     }).join('');
   } else if(qid==='q4'){
     const maxO=Math.max(...data.map(d=>d.OrdersThisMonth));
-    const maxS=Math.max(...data.map(d=>d.MonthlySpend));
     headCols=['Rank','Customer','Orders This Month','Monthly Spend','Last Order'];
     rows=data.map((r,i)=>{
       const pctO=Math.round((r.OrdersThisMonth/maxO)*100);
+      // Clean date formatting — handle both ISO strings and plain date strings
+      const rawDate=r.LastOrderDate||'';
+      let cleanDate='—';
+      if(rawDate){
+        const d=new Date(rawDate);
+        if(!isNaN(d)){
+          cleanDate=d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+        } else {
+          cleanDate=rawDate.split('T')[0]; // fallback: just show YYYY-MM-DD
+        }
+      }
       return '<tr style="animation:fadeUp .35s ease '+(i*.07)+'s both">'
         +'<td><span class="medal">'+(MEDALS[i]||'#'+(i+1))+'</span></td>'
         +'<td><strong>'+r.CustomerName+'</strong></td>'
         +'<td><div class="rbar"><span style="color:var(--orange);font-weight:700;min-width:18px;">'+r.OrdersThisMonth+'</span><div class="rbar-track"><div class="rbar-fill" style="width:'+pctO+'%"></div></div></div></td>'
         +'<td class="hl">₹'+Number(r.MonthlySpend).toLocaleString('en-IN')+'</td>'
-        +'<td style="color:var(--muted);font-size:.8rem;">'+r.LastOrderDate+'</td>'
+        +'<td style="color:var(--muted);font-size:.82rem;">'+cleanDate+'</td>'
         +'</tr>';
     }).join('');
   } else if(qid==='q5'){
