@@ -132,7 +132,7 @@ app.get('/api/q1-top-restaurants', async (req, res) => {
         GROUP BY r.RestaurantID, r.RestaurantName
         HAVING COUNT(o.OrderID) > 5
         ORDER BY AvgRating DESC, TotalRevenue DESC
-        LIMIT 3`;
+        LIMIT 5`;
     try { res.json(await query(sql)); } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -238,7 +238,7 @@ app.get('/api/adv/q1', async (req, res) => {
             GROUP BY r.RestaurantID, r.RestaurantName
             HAVING COUNT(o.OrderID) > 5
             ORDER BY AvgRating DESC, TotalRevenue DESC
-            LIMIT 3`);
+            LIMIT 5`);
         res.json(rows);
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
