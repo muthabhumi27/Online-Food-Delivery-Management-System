@@ -748,7 +748,7 @@ JOIN OrderItem oi  ON o.OrderID      = oi.OrderID
 GROUP BY r.RestaurantID, r.RestaurantName
 HAVING COUNT(o.OrderID) > 5
 ORDER BY AvgRating DESC, TotalRevenue DESC
-LIMIT 3;
+LIMIT 5;
 
 SELECT '═══ Q2: Restaurant Peak Days Heatmap ═══' AS '';
 SELECT r.RestaurantName,
