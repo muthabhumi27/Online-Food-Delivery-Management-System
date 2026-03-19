@@ -750,7 +750,7 @@ HAVING COUNT(o.OrderID) > 5
 ORDER BY AvgRating DESC, TotalRevenue DESC
 LIMIT 5;
 
-SELECT '═══ Q2: Restaurant Peak Days Heatmap ═══' AS '';
+SELECT '═══ Q2: Restaurant Peak Days ═══' AS '';
 SELECT r.RestaurantName,
        DAYNAME(o.OrderDate)            AS DayOfWeek,
        COUNT(o.OrderID)                AS TotalOrders
