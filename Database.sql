@@ -737,7 +737,7 @@ GROUP BY c.CustomerID, c.CustomerName;
 -- ─────────────────────────────────────────
 SELECT '✅ Database ready! 15 customers · 10 restaurants · 120 orders' AS Status;
 
-SELECT '═══ Q1: Top 3 Restaurants by Avg Rating & Revenue ═══' AS '';
+SELECT '═══ Q1: Top 5 Restaurants by Avg Rating & Revenue ═══' AS '';
 SELECT r.RestaurantName,
        ROUND(AVG(rev.Rating), 1)             AS AvgRating,
        SUM(oi.Quantity * oi.ItemPrice)        AS TotalRevenue
