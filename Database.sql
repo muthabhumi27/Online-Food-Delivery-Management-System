@@ -3287,23 +3287,28 @@ ORDER BY AvgRating DESC, TotalRevenue DESC
 LIMIT 5;
 
 -- Q2: Peak Day Per Restaurant — exactly 1 row per restaurant, no ties possible
+CREATE OR REPLACE VIEW RestaurantDayOrders AS
 SELECT r.RestaurantName,
-       DAYNAME(o.OrderDate)      AS PeakDay,
-       COUNT(DISTINCT o.OrderID) AS TotalOrders
+       DAYNAME(o.OrderDate)          AS PeakDay,
+       COUNT(DISTINCT o.OrderID)     AS TotalOrders
 FROM Restaurant r
 JOIN `Order` o ON r.RestaurantID = o.RestaurantID
                AND o.OrderStatus = 'Delivered'
-GROUP BY r.RestaurantID, r.RestaurantName, DAYNAME(o.OrderDate)
-HAVING COUNT(DISTINCT o.OrderID) = (
-    SELECT COUNT(DISTINCT o2.OrderID)
-    FROM `Order` o2
-    WHERE o2.RestaurantID = r.RestaurantID
-      AND o2.OrderStatus = 'Delivered'
-    GROUP BY DAYNAME(o2.OrderDate)
-    ORDER BY COUNT(DISTINCT o2.OrderID) DESC
-    LIMIT 1
-)
-ORDER BY r.RestaurantName;
+GROUP BY r.RestaurantID, r.RestaurantName, DAYNAME(o.OrderDate);
+
+CREATE OR REPLACE VIEW RestaurantMaxOrders AS
+SELECT RestaurantName,
+       MAX(TotalOrders) AS MaxOrders
+FROM RestaurantDayOrders
+GROUP BY RestaurantName;
+
+SELECT d.RestaurantName,
+       d.PeakDay,
+       d.TotalOrders
+FROM RestaurantDayOrders d
+JOIN RestaurantMaxOrders m ON d.RestaurantName = m.RestaurantName
+                           AND d.TotalOrders   = m.MaxOrders
+ORDER BY d.RestaurantName;
 
 -- Q3: Top 5 Most Ordered Food Items
 SELECT fi.Name              AS FoodItem,
