@@ -205,7 +205,6 @@ input[type="date"]:focus{border-color:var(--orange);}
 .a-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);overflow:hidden;}
 .a-empty{padding:55px;text-align:center;color:var(--muted);font-size:.88rem;}
 .a-empty .big{font-size:2.8rem;display:block;margin-bottom:10px;}
-.a-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);overflow:hidden;}
 .a-card-inner{overflow-x:auto;}
 .dtable{width:100%;border-collapse:collapse;min-width:420px;}
 .dtable th{background:rgba(255,87,34,.06);color:var(--orange);text-align:left;padding:13px 16px;font-family:'Syne',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;border-bottom:1px solid var(--card-border);}
@@ -218,14 +217,19 @@ input[type="date"]:focus{border-color:var(--orange);}
 .b-delivered{background:rgba(0,200,83,.15);color:var(--green);}
 .b-placed{background:rgba(255,179,0,.15);color:var(--yellow);}
 .b-cancelled{background:rgba(255,23,68,.15);color:#FF1744;}
-.b-other{background:rgba(255,255,255,.08);color:var(--muted);}
 .rbar{display:flex;align-items:center;gap:10px;}
 .rbar-track{flex:1;height:5px;background:var(--card-border);border-radius:3px;overflow:hidden;}
 .rbar-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));border-radius:3px;transition:width .6s ease;}
 .pbar-track{height:7px;background:var(--card-border);border-radius:4px;overflow:hidden;min-width:120px;}
 .pbar-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));border-radius:4px;transition:width .6s ease;}
 
-
+/* ── DB STATUS INDICATOR ── */
+.db-indicator{display:flex;align-items:center;gap:6px;font-size:.72rem;padding:4px 10px;border-radius:20px;border:1px solid;}
+.db-indicator.live{background:rgba(0,200,83,.08);border-color:rgba(0,200,83,.3);color:var(--green);}
+.db-indicator.demo{background:rgba(255,179,0,.08);border-color:rgba(255,179,0,.3);color:var(--yellow);}
+.db-dot{width:6px;height:6px;border-radius:50%;}
+.db-indicator.live .db-dot{background:var(--green);}
+.db-indicator.demo .db-dot{background:var(--yellow);}
 
 /* ── ADDRESS STEP ── */
 .addr-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
@@ -327,7 +331,13 @@ input[type="date"]:focus{border-color:var(--orange);}
 <nav class="navbar">
   <div class="logo">🔥 FoodRush<span>Pune</span></div>
   <div class="nav-pill">📍 Pune, <strong>Maharashtra</strong></div>
-  <a href="analytics.html" class="nav-link">📊 Advanced SQL</a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="db-indicator demo" id="dbIndicator">
+      <div class="db-dot"></div>
+      <span id="dbIndicatorText">Connecting...</span>
+    </div>
+    <a href="analytics.html" class="nav-link">📊 Advanced SQL</a>
+  </div>
   <div class="avatar" id="navAvatar">U</div>
 </nav>
 
@@ -380,16 +390,16 @@ input[type="date"]:focus{border-color:var(--orange);}
   <div class="steps">
     <div class="step done" id="step1"><div class="step-num">✓</div><span>Restaurant</span></div>
     <span class="step-arr">›</span>
-    <div class="step"      id="step2"><div class="step-num">2</div><span>Menu</span></div>
+    <div class="step" id="step2"><div class="step-num">2</div><span>Menu</span></div>
     <span class="step-arr">›</span>
-    <div class="step"      id="step3"><div class="step-num">3</div><span>Address</span></div>
+    <div class="step" id="step3"><div class="step-num">3</div><span>Address</span></div>
     <span class="step-arr">›</span>
-    <div class="step"      id="step4"><div class="step-num">4</div><span>Payment</span></div>
+    <div class="step" id="step4"><div class="step-num">4</div><span>Payment</span></div>
     <span class="step-arr">›</span>
-    <div class="step"      id="step5"><div class="step-num">5</div><span>Confirm</span></div>
+    <div class="step" id="step5"><div class="step-num">5</div><span>Confirm</span></div>
   </div>
 
-  <!-- STEP 2: Logged-in user -->
+  <!-- STEP 2 -->
   <div class="panel-card" id="customerPanel">
     <div class="panel-card-title"><span class="step-icon">👤</span> Ordering as</div>
     <div id="loggedInUserCard" style="display:flex;align-items:center;gap:14px;background:var(--surface);border:2px solid var(--orange);border-radius:12px;padding:14px 18px;margin-bottom:18px;">
@@ -428,9 +438,9 @@ input[type="date"]:focus{border-color:var(--orange);}
           <button class="addr-type-btn" onclick="setAddrType(this,'Other')">📌 Other</button>
         </div>
         <div class="addr-grid">
-          <input class="addr-input addr-grid-full" id="addrFlat"    type="text" placeholder="Flat / House No., Building Name">
-          <input class="addr-input addr-grid-full" id="addrStreet"  type="text" placeholder="Street / Area / Colony">
-          <input class="addr-input" id="addrCity"    type="text" placeholder="City" value="Pune">
+          <input class="addr-input addr-grid-full" id="addrFlat" type="text" placeholder="Flat / House No., Building Name">
+          <input class="addr-input addr-grid-full" id="addrStreet" type="text" placeholder="Street / Area / Colony">
+          <input class="addr-input" id="addrCity" type="text" placeholder="City" value="Pune">
           <input class="addr-input" id="addrPincode" type="text" placeholder="Pincode" maxlength="6">
         </div>
         <button class="addr-save-btn" onclick="saveNewAddress()">Save Address →</button>
@@ -456,7 +466,7 @@ input[type="date"]:focus{border-color:var(--orange);}
     <button class="a-tab" onclick="loadAnalytics(this,'q5')">🚴 Q5 · Top Delivery</button>
   </div>
   <div class="a-card" id="aCard">
-    <div class="a-empty"><span class="big">📡</span>Click a query tab above to load results.</div>
+    <div class="a-empty"><span class="big">📡</span>Loading live data...</div>
   </div>
 </section>
 
@@ -490,7 +500,13 @@ input[type="date"]:focus{border-color:var(--orange);}
 
 <script>
 // ═══════════════════════════════════════
-//  DATA
+//  CONFIG
+// ═══════════════════════════════════════
+const SERVER = 'http://localhost:3000';
+let isLiveDB = false; // tracks if real DB is connected
+
+// ═══════════════════════════════════════
+//  RESTAURANT DATA
 // ═══════════════════════════════════════
 const RESTS = [
   { id:1, name:"Vohuman Café", loc:"Sassoon Road, Camp", emoji:"☕", bg:"linear-gradient(135deg,#3E2723,#6D4C41)", cuisine:["north-indian","dessert"], tags:["Irani Café","Chai","Breakfast"], rating:4.7, time:"25-35", offer:"20% OFF",
@@ -511,16 +527,16 @@ const RESTS = [
   { id:6, name:"Café Goodluck", loc:"Deccan Gymkhana", emoji:"🌙", bg:"linear-gradient(135deg,#263238,#455A64)", cuisine:["north-indian","dessert"], tags:["Irani","Historic","24 hrs"], rating:4.6, time:"25-35", offer:"Always Open",
     menu:{"Parsi Specials":[ {id:601,name:"Chicken Berry Pulao",price:340,veg:false,desc:"Signature rice with dried berries"},{id:602,name:"Mutton Dhansak",price:380,veg:false,desc:"Parsi lentil stew"},{id:603,name:"Akuri on Toast",price:160,veg:false,desc:"Spiced scrambled egg on toast"},{id:604,name:"Cheese Omelette",price:120,veg:false,desc:"Fluffy, loaded with cheese"} ],"Café Classics":[ {id:605,name:"Irani Chai",price:30,veg:true,desc:"Thick creamy chai"},{id:606,name:"Caramel Custard",price:80,veg:true,desc:"Classic French custard"} ]}
   },
-  { id:7, name:"Vaishali Restaurant", loc:"Ferguson College Road, Pune", emoji:"🥘", bg:"linear-gradient(135deg,#004D40,#00695C)", cuisine:["south-indian","north-indian"], tags:["Misal","Maharashtrian","Classic"], rating:4.5, time:"20-30", offer:"Since 1960",
-    menu:{"Maharashtrian":[ {id:701,name:"Misal Pav",price:90,veg:true,desc:"Spicy sprouted moth curry with bread"},{id:702,name:"Vada Pav",price:30,veg:true,desc:"Mumbai's favourite street burger"},{id:703,name:"Pav Bhaji",price:120,veg:true,desc:"Buttery mixed vegetable mash"} ],"South Indian":[ {id:704,name:"Masala Dosa",price:110,veg:true,desc:"Crispy dosa with spiced potato filling"},{id:705,name:"Upma",price:60,veg:true,desc:"Semolina breakfast dish"},{id:706,name:"Filter Coffee",price:40,veg:true,desc:"Strong South Indian drip coffee"} ]}
+  { id:7, name:"Vaishali Restaurant", loc:"Ferguson College Road", emoji:"🥘", bg:"linear-gradient(135deg,#004D40,#00695C)", cuisine:["south-indian","north-indian"], tags:["Misal","Maharashtrian","Classic"], rating:4.5, time:"20-30", offer:"Since 1960",
+    menu:{"Maharashtrian":[ {id:701,name:"Misal Pav",price:90,veg:true,desc:"Spicy sprouted moth curry"},{id:702,name:"Vada Pav",price:30,veg:true,desc:"Mumbai's favourite street burger"},{id:703,name:"Pav Bhaji",price:120,veg:true,desc:"Buttery mixed vegetable mash"} ],"South Indian":[ {id:704,name:"Masala Dosa",price:110,veg:true,desc:"Crispy dosa with spiced potato filling"},{id:705,name:"Upma",price:60,veg:true,desc:"Semolina breakfast dish"},{id:706,name:"Filter Coffee",price:40,veg:true,desc:"Strong South Indian drip coffee"} ]}
   },
-  { id:8, name:"Sujata Mastani", loc:"Jungli Maharaj Road, Pune", emoji:"🍨", bg:"linear-gradient(135deg,#880E4F,#AD1457)", cuisine:["dessert"], tags:["Mastani","Iconic","Thick Shakes"], rating:4.7, time:"15-20", offer:"Original Since 1976",
+  { id:8, name:"Sujata Mastani", loc:"Jungli Maharaj Road", emoji:"🍨", bg:"linear-gradient(135deg,#880E4F,#AD1457)", cuisine:["dessert"], tags:["Mastani","Iconic","Thick Shakes"], rating:4.7, time:"15-20", offer:"Original Since 1976",
     menu:{"Mastani Specials":[ {id:801,name:"Classic Mastani",price:150,veg:true,desc:"Thick ice cream shake topped with dry fruits"},{id:802,name:"Mango Mastani",price:170,veg:true,desc:"Fresh mango with vanilla ice cream"},{id:803,name:"Strawberry Mastani",price:160,veg:true,desc:"Strawberry shake with ice cream topping"},{id:804,name:"Chocolate Mastani",price:180,veg:true,desc:"Rich chocolate with nuts and cream"},{id:805,name:"Kesar Pista Mastani",price:190,veg:true,desc:"Saffron and pistachio royal blend"} ]}
   },
-  { id:9, name:"Hotel Shreyas", loc:"Tilak Road, Sadashiv Peth, Pune", emoji:"🍱", bg:"linear-gradient(135deg,#E65100,#F57F17)", cuisine:["north-indian"], tags:["Thali","Maharashtrian","Traditional"], rating:4.4, time:"25-35", offer:"Authentic Thali",
-    menu:{"Maharashtrian Thali":[ {id:901,name:"Thali Meal",price:180,veg:true,desc:"Full Maharashtrian thali with all accompaniments"},{id:902,name:"Puran Poli",price:60,veg:true,desc:"Sweet lentil stuffed flatbread"},{id:903,name:"Shrikhand",price:80,veg:true,desc:"Strained yoghurt with saffron and cardamom"},{id:904,name:"Bharli Vangi",price:140,veg:true,desc:"Stuffed brinjal in peanut gravy"},{id:905,name:"Sol Kadhi",price:50,veg:true,desc:"Kokum and coconut milk digestive drink"},{id:906,name:"Basundi",price:90,veg:true,desc:"Thickened sweetened milk with dry fruits"} ]}
+  { id:9, name:"Hotel Shreyas", loc:"Tilak Road, Sadashiv Peth", emoji:"🍱", bg:"linear-gradient(135deg,#E65100,#F57F17)", cuisine:["north-indian"], tags:["Thali","Maharashtrian","Traditional"], rating:4.4, time:"25-35", offer:"Authentic Thali",
+    menu:{"Maharashtrian Thali":[ {id:901,name:"Thali Meal",price:180,veg:true,desc:"Full Maharashtrian thali"},{id:902,name:"Puran Poli",price:60,veg:true,desc:"Sweet lentil stuffed flatbread"},{id:903,name:"Shrikhand",price:80,veg:true,desc:"Strained yoghurt with saffron"},{id:904,name:"Bharli Vangi",price:140,veg:true,desc:"Stuffed brinjal in peanut gravy"},{id:905,name:"Sol Kadhi",price:50,veg:true,desc:"Kokum and coconut milk digestive"},{id:906,name:"Basundi",price:90,veg:true,desc:"Thickened sweetened milk"} ]}
   },
-  { id:10, name:"The Flour Works", loc:"Koregaon Park, Lane 6, Pune", emoji:"🍕", bg:"linear-gradient(135deg,#1A237E,#283593)", cuisine:["pizza"], tags:["Continental","Pizza","Bakery"], rating:4.6, time:"30-40", offer:"Wood-fired Oven",
+  { id:10, name:"The Flour Works", loc:"Koregaon Park, Lane 6", emoji:"🍕", bg:"linear-gradient(135deg,#1A237E,#283593)", cuisine:["pizza"], tags:["Continental","Pizza","Bakery"], rating:4.6, time:"30-40", offer:"Wood-fired Oven",
     menu:{"Pizza & Pasta":[ {id:1001,name:"Wood-fired Pizza",price:450,veg:true,desc:"Thin crust from the wood-fired oven"},{id:1002,name:"Pasta Arrabiata",price:320,veg:true,desc:"Spicy tomato sauce pasta"},{id:1003,name:"Mushroom Risotto",price:390,veg:true,desc:"Creamy arborio rice with mushrooms"} ],"Desserts":[ {id:1004,name:"Tiramisu",price:220,veg:true,desc:"Classic Italian coffee dessert"},{id:1005,name:"Bruschetta",price:180,veg:true,desc:"Toasted bread with tomato and herbs"},{id:1006,name:"Lemon Tart",price:190,veg:true,desc:"Tangy lemon curd in buttery pastry"} ]}
   }
 ];
@@ -529,56 +545,53 @@ const RESTS = [
 const ITEM_MAP = {};
 RESTS.forEach(r => { for (const items of Object.values(r.menu)) items.forEach(i => { ITEM_MAP[i.id] = i; }); });
 
-// Mock analytics data — matches exact server column names
+// ═══════════════════════════════════════
+//  MOCK DATA — matches REAL DB values from MySQL Workbench
+// ═══════════════════════════════════════
 const MOCK = {
   q1:[
-    {RestaurantName:"Malaka Spice",          AvgRating:"4.9", TotalRevenue:"94800"},
-    {RestaurantName:"Café Goodluck",         AvgRating:"4.8", TotalRevenue:"82400"},
-    {RestaurantName:"Sujata Mastani",        AvgRating:"4.7", TotalRevenue:"58600"},
-    {RestaurantName:"Vohuman Café",          AvgRating:"4.8", TotalRevenue:"61200"},
-    {RestaurantName:"The Flour Works",       AvgRating:"4.6", TotalRevenue:"47300"}
+    {RestaurantName:"Malaka Spice",    AvgRating:"4.9", TotalRevenue:"854100"},
+    {RestaurantName:"Café Goodluck",   AvgRating:"4.8", TotalRevenue:"134640"},
+    {RestaurantName:"Kayani Bakery",   AvgRating:"4.8", TotalRevenue:"55880"},
+    {RestaurantName:"Vohuman Café",    AvgRating:"4.8", TotalRevenue:"16000"},
+    {RestaurantName:"Sujata Mastani",  AvgRating:"4.7", TotalRevenue:"35680"}
   ],
   q2:[
-    {RestaurantName:"Vohuman Café",          DayOfWeek:"Sunday",    TotalOrders:4, Revenue:640},
-    {RestaurantName:"Vohuman Café",          DayOfWeek:"Monday",    TotalOrders:3, Revenue:480},
-    {RestaurantName:"Vohuman Café",          DayOfWeek:"Tuesday",   TotalOrders:2, Revenue:320},
-    {RestaurantName:"Vohuman Café",          DayOfWeek:"Wednesday", TotalOrders:2, Revenue:320},
-    {RestaurantName:"Vohuman Café",          DayOfWeek:"Friday",    TotalOrders:3, Revenue:480},
-    {RestaurantName:"Vohuman Café",          DayOfWeek:"Saturday",  TotalOrders:3, Revenue:480},
-    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Sunday",    TotalOrders:4, Revenue:960},
-    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Monday",    TotalOrders:2, Revenue:480},
-    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Wednesday", TotalOrders:1, Revenue:240},
-    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Friday",    TotalOrders:3, Revenue:720},
-    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Saturday",  TotalOrders:5, Revenue:1200},
-    {RestaurantName:"Malaka Spice",          DayOfWeek:"Sunday",    TotalOrders:7, Revenue:9800},
-    {RestaurantName:"Malaka Spice",          DayOfWeek:"Monday",    TotalOrders:3, Revenue:4200},
-    {RestaurantName:"Malaka Spice",          DayOfWeek:"Tuesday",   TotalOrders:2, Revenue:2800},
-    {RestaurantName:"Malaka Spice",          DayOfWeek:"Wednesday", TotalOrders:3, Revenue:4200},
-    {RestaurantName:"Malaka Spice",          DayOfWeek:"Thursday",  TotalOrders:2, Revenue:2800},
-    {RestaurantName:"Malaka Spice",          DayOfWeek:"Friday",    TotalOrders:5, Revenue:7000},
-    {RestaurantName:"Malaka Spice",          DayOfWeek:"Saturday",  TotalOrders:4, Revenue:5600},
-    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Sunday",    TotalOrders:2, Revenue:1400},
-    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Monday",    TotalOrders:3, Revenue:2100},
-    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Tuesday",   TotalOrders:1, Revenue:700},
-    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Wednesday", TotalOrders:2, Revenue:1400},
-    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Friday",    TotalOrders:2, Revenue:1400},
-    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Saturday",  TotalOrders:2, Revenue:1400},
-    {RestaurantName:"The Belgian Waffle Co.",DayOfWeek:"Sunday",    TotalOrders:3, Revenue:2100},
-    {RestaurantName:"The Belgian Waffle Co.",DayOfWeek:"Tuesday",   TotalOrders:1, Revenue:700},
-    {RestaurantName:"The Belgian Waffle Co.",DayOfWeek:"Thursday",  TotalOrders:1, Revenue:700},
-    {RestaurantName:"The Belgian Waffle Co.",DayOfWeek:"Friday",    TotalOrders:2, Revenue:1400},
-    {RestaurantName:"The Belgian Waffle Co.",DayOfWeek:"Saturday",  TotalOrders:4, Revenue:2800},
-    {RestaurantName:"Café Goodluck",         DayOfWeek:"Sunday",    TotalOrders:4, Revenue:3200},
-    {RestaurantName:"Café Goodluck",         DayOfWeek:"Monday",    TotalOrders:3, Revenue:2400},
-    {RestaurantName:"Café Goodluck",         DayOfWeek:"Wednesday", TotalOrders:2, Revenue:1600},
-    {RestaurantName:"Café Goodluck",         DayOfWeek:"Thursday",  TotalOrders:2, Revenue:1600},
-    {RestaurantName:"Café Goodluck",         DayOfWeek:"Friday",    TotalOrders:5, Revenue:4100},
-    {RestaurantName:"Café Goodluck",         DayOfWeek:"Saturday",  TotalOrders:3, Revenue:2400}
+    {RestaurantName:"Vohuman Café",          DayOfWeek:"Sunday",    TotalOrders:4},
+    {RestaurantName:"Vohuman Café",          DayOfWeek:"Monday",    TotalOrders:3},
+    {RestaurantName:"Vohuman Café",          DayOfWeek:"Tuesday",   TotalOrders:2},
+    {RestaurantName:"Vohuman Café",          DayOfWeek:"Wednesday", TotalOrders:2},
+    {RestaurantName:"Vohuman Café",          DayOfWeek:"Friday",    TotalOrders:3},
+    {RestaurantName:"Vohuman Café",          DayOfWeek:"Saturday",  TotalOrders:3},
+    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Sunday",    TotalOrders:4},
+    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Monday",    TotalOrders:2},
+    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Wednesday", TotalOrders:1},
+    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Friday",    TotalOrders:3},
+    {RestaurantName:"Kayani Bakery",         DayOfWeek:"Saturday",  TotalOrders:5},
+    {RestaurantName:"Malaka Spice",          DayOfWeek:"Sunday",    TotalOrders:7},
+    {RestaurantName:"Malaka Spice",          DayOfWeek:"Monday",    TotalOrders:3},
+    {RestaurantName:"Malaka Spice",          DayOfWeek:"Tuesday",   TotalOrders:2},
+    {RestaurantName:"Malaka Spice",          DayOfWeek:"Wednesday", TotalOrders:3},
+    {RestaurantName:"Malaka Spice",          DayOfWeek:"Thursday",  TotalOrders:2},
+    {RestaurantName:"Malaka Spice",          DayOfWeek:"Friday",    TotalOrders:5},
+    {RestaurantName:"Malaka Spice",          DayOfWeek:"Saturday",  TotalOrders:4},
+    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Sunday",    TotalOrders:2},
+    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Monday",    TotalOrders:3},
+    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Tuesday",   TotalOrders:1},
+    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Wednesday", TotalOrders:2},
+    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Friday",    TotalOrders:2},
+    {RestaurantName:"Rangla Punjab",         DayOfWeek:"Saturday",  TotalOrders:2},
+    {RestaurantName:"Café Goodluck",         DayOfWeek:"Sunday",    TotalOrders:4},
+    {RestaurantName:"Café Goodluck",         DayOfWeek:"Monday",    TotalOrders:3},
+    {RestaurantName:"Café Goodluck",         DayOfWeek:"Wednesday", TotalOrders:2},
+    {RestaurantName:"Café Goodluck",         DayOfWeek:"Thursday",  TotalOrders:2},
+    {RestaurantName:"Café Goodluck",         DayOfWeek:"Friday",    TotalOrders:5},
+    {RestaurantName:"Café Goodluck",         DayOfWeek:"Saturday",  TotalOrders:3}
   ],
   q3:[
-    {FoodItem:"Thai Green Curry",  RestaurantName:"Malaka Spice",    TotalOrdered:28, OrderedInOrders:10},
-    {FoodItem:"Pad Thai Noodles",  RestaurantName:"Malaka Spice",    TotalOrdered:22, OrderedInOrders:9},
-    {FoodItem:"Special Irani Chai",RestaurantName:"Vohuman Café",    TotalOrdered:20, OrderedInOrders:8},
+    {FoodItem:"Thai Green Curry",   RestaurantName:"Malaka Spice",   TotalOrdered:28, OrderedInOrders:10},
+    {FoodItem:"Pad Thai Noodles",   RestaurantName:"Malaka Spice",   TotalOrdered:22, OrderedInOrders:9},
+    {FoodItem:"Special Irani Chai", RestaurantName:"Vohuman Café",   TotalOrdered:20, OrderedInOrders:8},
     {FoodItem:"Shrewsbury Biscuits",RestaurantName:"Kayani Bakery",  TotalOrdered:18, OrderedInOrders:7},
     {FoodItem:"Chicken Berry Pulao",RestaurantName:"Café Goodluck",  TotalOrdered:15, OrderedInOrders:6}
   ],
@@ -590,23 +603,30 @@ const MOCK = {
     {CustomerName:"Sneha Joshi",    OrdersThisMonth:1, MonthlySpend:680,  LastOrderDate:"2026-02-14"}
   ],
   q5:[
-    {DeliveryManName:"Sanjay Patil",  Deliveries:28},
-    {DeliveryManName:"Rahul Shinde",  Deliveries:24},
-    {DeliveryManName:"Amit Waghmare", Deliveries:21},
-    {DeliveryManName:"Ganesh Jadhav", Deliveries:18},
-    {DeliveryManName:"Vijay Kale",    Deliveries:15}
+    {DeliveryManName:"Sanjay Patil",  VehicleType:"Bike",    Deliveries:7},
+    {DeliveryManName:"Rahul Shinde",  VehicleType:"Scooter", Deliveries:6},
+    {DeliveryManName:"Amit Waghmare", VehicleType:"Bike",    Deliveries:5},
+    {DeliveryManName:"Ganesh Jadhav", VehicleType:"Scooter", Deliveries:4},
+    {DeliveryManName:"Vijay Kale",    VehicleType:"Bike",    Deliveries:4}
   ]
 };
 
-const API = {q1:'q1-top-restaurants',q2:'q2-peak-days',q3:'q3-popular-items',q4:'q4-loyalty-segments',q5:'q5-top-delivery'};
+const API_ROUTES = {
+  q1:'q1-top-restaurants',
+  q2:'q2-peak-days',
+  q3:'q3-popular-items',
+  q4:'q4-loyalty-segments',
+  q5:'q5-top-delivery'
+};
 const MEDALS = ['🥇','🥈','🥉','#4','#5'];
-// Demo customers (mirrors DB)
+
+// DB customers (mirrors actual DB)
 const DB_CUSTOMERS = [
-  {id:1,name:"Aarav Sharma",  phone:"9876501001",email:"aarav@gmail.com", color:"#FF5722"},
-  {id:2,name:"Priya Desai",   phone:"9876501002",email:"priya@gmail.com", color:"#7C4DFF"},
-  {id:3,name:"Rohan Kulkarni",phone:"9876501003",email:"rohan@gmail.com", color:"#00BCD4"},
-  {id:4,name:"Sneha Joshi",   phone:"9876501004",email:"sneha@gmail.com", color:"#FF9800"},
-  {id:5,name:"Arjun Mehta",   phone:"9876501005",email:"arjun@gmail.com", color:"#4CAF50"}
+  {id:1,name:"Aarav Sharma",  phone:"9876501001",email:"aarav@gmail.com",  color:"#FF5722"},
+  {id:2,name:"Priya Desai",   phone:"9876501002",email:"priya@gmail.com",  color:"#7C4DFF"},
+  {id:3,name:"Rohan Kulkarni",phone:"9876501003",email:"rohan@gmail.com",  color:"#00BCD4"},
+  {id:4,name:"Sneha Joshi",   phone:"9876501004",email:"sneha@gmail.com",  color:"#FF9800"},
+  {id:5,name:"Arjun Mehta",   phone:"9876501005",email:"arjun@gmail.com",  color:"#4CAF50"}
 ];
 let nextId = 6;
 
@@ -622,101 +642,169 @@ const USER_ADDRESSES = {
 let selRest=null, selCust=null, cart={}, selAddrId=null, addrTypeVal='Home', selPayMethod='UPI';
 
 // ═══════════════════════════════════════
+//  DB CONNECTION CHECK
+// ═══════════════════════════════════════
+async function checkDBConnection() {
+  const indicator = document.getElementById('dbIndicator');
+  const txt = document.getElementById('dbIndicatorText');
+  try {
+    const res = await fetch(SERVER + '/api/q1-top-restaurants', {
+      signal: AbortSignal.timeout(3000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.length > 0 && !data.error) {
+        isLiveDB = true;
+        indicator.className = 'db-indicator live';
+        txt.textContent = '✅ Live DB';
+        return true;
+      }
+    }
+  } catch(e) {}
+  isLiveDB = false;
+  indicator.className = 'db-indicator demo';
+  txt.textContent = '⚠️ Demo Mode';
+  return false;
+}
+
+// ═══════════════════════════════════════
+//  ROBUST API FETCH — tries live DB first, falls back to mock
+// ═══════════════════════════════════════
+async function fetchAnalytics(qid) {
+  // Always try live DB first
+  try {
+    const res = await fetch(`${SERVER}/api/${API_ROUTES[qid]}`, {
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data && data.length > 0 && !data.error) {
+      isLiveDB = true;
+      document.getElementById('dbIndicator').className = 'db-indicator live';
+      document.getElementById('dbIndicatorText').textContent = '✅ Live DB';
+      return { data, source: 'live' };
+    }
+  } catch(e) {}
+
+  // Fallback to mock
+  isLiveDB = false;
+  document.getElementById('dbIndicator').className = 'db-indicator demo';
+  document.getElementById('dbIndicatorText').textContent = '⚠️ Demo Mode';
+  await new Promise(r => setTimeout(r, 300));
+  return { data: MOCK[qid], source: 'mock' };
+}
+
+// ═══════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', async () => {
   renderRests(RESTS);
-  document.getElementById('orderDate').value=new Date().toISOString().split('T')[0];
-  loadAnalytics(document.querySelector('.a-tab'),'q1');
-  const saved=sessionStorage.getItem('frUser');
-  if(saved){selCust=JSON.parse(saved);completeLogin(selCust,false);}
+  document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
+
+  // Check DB connection first
+  await checkDBConnection();
+
+  // Auto-load Q1 analytics
+  loadAnalytics(document.querySelector('.a-tab'), 'q1');
+
+  // Restore session
+  const saved = sessionStorage.getItem('frUser');
+  if (saved) { selCust = JSON.parse(saved); completeLogin(selCust, false); }
 });
 
 // ═══════════════════════════════════════
 //  LOGIN / SIGNUP
 // ═══════════════════════════════════════
-function switchTab(tab){
-  document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');
-  document.getElementById('signupForm').classList.toggle('hidden',tab!=='signup');
-  document.getElementById('tabLogin').classList.toggle('active',tab==='login');
-  document.getElementById('tabSignup').classList.toggle('active',tab==='signup');
-  document.getElementById('loginErr').textContent='';
+function switchTab(tab) {
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+  document.getElementById('loginErr').textContent = '';
 }
-function setErr(msg){document.getElementById('loginErr').textContent=msg;}
+function setErr(msg) { document.getElementById('loginErr').textContent = msg; }
 
-function handleLogin(){
-  const phone=document.getElementById('loginPhone').value.trim();
-  if(!/^[0-9]{10}$/.test(phone)){setErr('Please enter a valid 10-digit number.');return;}
+function handleLogin() {
+  const phone = document.getElementById('loginPhone').value.trim();
+  if (!/^[0-9]{10}$/.test(phone)) { setErr('Please enter a valid 10-digit number.'); return; }
   tryApiLogin(phone);
 }
 
-async function tryApiLogin(phone){
-  let user=null;
-  try{
-    const res=await fetch('http://localhost:3000/api/customer/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})});
-    if(res.ok){const d=await res.json();if(d.found)user=d.customer;}
-  }catch(e){}
-  if(!user) user=DB_CUSTOMERS.find(c=>c.phone===phone);
-  if(!user){setErr('No account found. Please sign up first.');switchTab('signup');document.getElementById('signupPhone').value=phone;return;}
-  completeLogin(user,true);
+async function tryApiLogin(phone) {
+  let user = null;
+  try {
+    const res = await fetch(SERVER + '/api/customer/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({phone}),
+      signal: AbortSignal.timeout(4000)
+    });
+    if (res.ok) { const d = await res.json(); if (d.found) user = d.customer; }
+  } catch(e) {}
+  if (!user) user = DB_CUSTOMERS.find(c => c.phone === phone);
+  if (!user) { setErr('No account found. Please sign up first.'); switchTab('signup'); document.getElementById('signupPhone').value = phone; return; }
+  completeLogin(user, true);
 }
 
-function handleSignup(){
-  const name=document.getElementById('signupName').value.trim();
-  const phone=document.getElementById('signupPhone').value.trim();
-  const email=document.getElementById('signupEmail').value.trim();
-  if(!name){setErr('Please enter your name.');return;}
-  if(!/^[0-9]{10}$/.test(phone)){setErr('Please enter a valid 10-digit number.');return;}
-  if(DB_CUSTOMERS.find(c=>c.phone===phone)){setErr('Already registered. Please login.');switchTab('login');document.getElementById('loginPhone').value=phone;return;}
-  const colors=['#E91E63','#9C27B0','#2196F3','#009688','#FF5722'];
-  const newUser={id:nextId++,name,phone,email:email||'',color:colors[Math.floor(Math.random()*colors.length)]};
+function handleSignup() {
+  const name  = document.getElementById('signupName').value.trim();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  if (!name) { setErr('Please enter your name.'); return; }
+  if (!/^[0-9]{10}$/.test(phone)) { setErr('Please enter a valid 10-digit number.'); return; }
+  if (DB_CUSTOMERS.find(c => c.phone === phone)) { setErr('Already registered. Please login.'); switchTab('login'); document.getElementById('loginPhone').value = phone; return; }
+  const colors = ['#E91E63','#9C27B0','#2196F3','#009688','#FF5722'];
+  const newUser = {id:nextId++, name, phone, email:email||'', color:colors[Math.floor(Math.random()*colors.length)]};
   DB_CUSTOMERS.push(newUser);
-  fetch('http://localhost:3000/api/customer/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,email:email||''})}).catch(()=>{});
-  completeLogin(newUser,true);
-  toast('Welcome to FoodRush!','Account created for '+name+' 🎉');
+  fetch(SERVER + '/api/customer/signup', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({name, phone, email:email||''})
+  }).catch(()=>{});
+  completeLogin(newUser, true);
+  toast('Welcome to FoodRush!', 'Account created for ' + name + ' 🎉');
 }
 
-function completeLogin(user,animate){
-  selCust=user;
-  sessionStorage.setItem('frUser',JSON.stringify(user));
-  document.getElementById('navAvatar').textContent=user.name[0];
-  document.getElementById('navAvatar').style.background=user.color||'var(--orange)';
-  document.getElementById('greetName').textContent=user.name.split(' ')[0];
+function completeLogin(user, animate) {
+  selCust = user;
+  sessionStorage.setItem('frUser', JSON.stringify(user));
+  document.getElementById('navAvatar').textContent = user.name[0];
+  document.getElementById('navAvatar').style.background = user.color || 'var(--orange)';
+  document.getElementById('greetName').textContent = user.name.split(' ')[0];
   document.getElementById('greetingBar').classList.add('show');
-  document.getElementById('userCardAvatar').textContent=user.name[0];
-  document.getElementById('userCardAvatar').style.background=user.color||'var(--orange)';
-  document.getElementById('userCardName').textContent=user.name;
-  document.getElementById('userCardPhone').textContent='📱 '+user.phone+(user.email?'  ·  ✉️ '+user.email:'');
-  if(animate){
-    const ls=document.getElementById('loginScreen');
+  document.getElementById('userCardAvatar').textContent = user.name[0];
+  document.getElementById('userCardAvatar').style.background = user.color || 'var(--orange)';
+  document.getElementById('userCardName').textContent = user.name;
+  document.getElementById('userCardPhone').textContent = '📱 ' + user.phone + (user.email ? '  ·  ✉️ ' + user.email : '');
+  if (animate) {
+    const ls = document.getElementById('loginScreen');
     ls.classList.add('hide');
-    setTimeout(()=>ls.style.display='none',500);
+    setTimeout(() => ls.style.display = 'none', 500);
   } else {
-    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('loginScreen').style.display = 'none';
   }
 }
 
-function logout(){
+function logout() {
   sessionStorage.removeItem('frUser');
-  selCust=null;
+  selCust = null;
   document.getElementById('greetingBar').classList.remove('show');
-  document.getElementById('navAvatar').textContent='U';
-  document.getElementById('navAvatar').style.background='var(--orange)';
-  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('navAvatar').textContent = 'U';
+  document.getElementById('navAvatar').style.background = 'var(--orange)';
+  document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('loginScreen').classList.remove('hide');
-  document.getElementById('loginPhone').value='';
-  document.getElementById('loginErr').textContent='';
+  document.getElementById('loginPhone').value = '';
+  document.getElementById('loginErr').textContent = '';
   switchTab('login');
   goBack();
-  toast('Logged out','See you soon! 👋');
+  toast('Logged out', 'See you soon! 👋');
 }
 
 // ═══════════════════════════════════════
 //  RESTAURANTS
 // ═══════════════════════════════════════
-function renderRests(list){
-  document.getElementById('restCount').textContent=list.length+' restaurants';
-  document.getElementById('restGrid').innerHTML=list.map(r=>`
+function renderRests(list) {
+  document.getElementById('restCount').textContent = list.length + ' restaurants';
+  document.getElementById('restGrid').innerHTML = list.map(r => `
     <div class="rest-card" id="rc${r.id}">
       <div class="rest-thumb" style="background:${r.bg}">
         <span>${r.emoji}</span>
@@ -725,215 +813,217 @@ function renderRests(list){
       <div class="rest-body">
         <div class="rest-name">${r.name}</div>
         <div class="rest-meta"><span class="stars">⭐ ${r.rating} rating</span><span>🕐 ${r.time} min</span></div>
-        <div class="rest-tags">${r.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="rest-tags">${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
         <div class="rest-loc">📍 ${r.loc}</div>
         <button class="order-btn" onclick="pickRest(${r.id})">View Menu &amp; Order →</button>
       </div>
     </div>`).join('');
 }
 
-function filterCuisine(el,tag){
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+function filterCuisine(el, tag) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  renderRests(tag==='all'?RESTS:RESTS.filter(r=>r.cuisine.includes(tag)));
+  renderRests(tag === 'all' ? RESTS : RESTS.filter(r => r.cuisine.includes(tag)));
 }
 
-function filterRests(){
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  renderRests(RESTS.filter(r=>r.name.toLowerCase().includes(q)||r.tags.some(t=>t.toLowerCase().includes(q))));
+function filterRests() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  renderRests(RESTS.filter(r => r.name.toLowerCase().includes(q) || r.tags.some(t => t.toLowerCase().includes(q))));
 }
 
 // ═══════════════════════════════════════
 //  PICK RESTAURANT
 // ═══════════════════════════════════════
-function pickRest(id){
-  selRest=RESTS.find(r=>r.id===id);
-  cart={};
+function pickRest(id) {
+  selRest = RESTS.find(r => r.id === id);
+  cart = {};
   updateCartUI();
-  ['homeSection','hiwSection','restSection'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  ['homeSection','hiwSection','restSection'].forEach(s => document.getElementById(s).classList.add('hidden'));
   document.getElementById('orderPanel').classList.remove('hidden');
   document.getElementById('addressPanel').classList.add('hidden');
   document.getElementById('customerPanel').classList.remove('hidden');
   document.getElementById('menuPanel').classList.add('hidden');
   setStep(1);
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0, behavior:'smooth'});
   toast('Restaurant Selected', selRest.name + ' — pick a date & view the menu!');
 }
 
-function goBack(){
-  ['homeSection','hiwSection','restSection'].forEach(s=>document.getElementById(s).classList.remove('hidden'));
+function goBack() {
+  ['homeSection','hiwSection','restSection'].forEach(s => document.getElementById(s).classList.remove('hidden'));
   document.getElementById('orderPanel').classList.add('hidden');
-  cart={};
+  cart = {};
   updateCartUI();
 }
 
 // ═══════════════════════════════════════
 //  GO TO MENU
 // ═══════════════════════════════════════
-function goToMenu(){
-  if(!selCust){toast('Not Logged In','Please login first.',true);return;}
-  if(!document.getElementById('orderDate').value){toast('Pick a Date','Please select an order date.',true);return;}
+function goToMenu() {
+  if (!selCust) { toast('Not Logged In','Please login first.',true); return; }
+  if (!document.getElementById('orderDate').value) { toast('Pick a Date','Please select an order date.',true); return; }
   document.getElementById('customerPanel').classList.add('hidden');
   document.getElementById('menuPanel').classList.remove('hidden');
   document.getElementById('addressPanel').classList.add('hidden');
   setStep(2);
   renderMenu();
-  document.getElementById('menuPanel').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('menuPanel').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 // ═══════════════════════════════════════
 //  RENDER MENU
 // ═══════════════════════════════════════
-function renderMenu(){
-  const r=selRest;
-  document.getElementById('menuHdr').innerHTML=
-    '<div class="menu-emoji">'+r.emoji+'</div>'+
-    '<div><h3>'+r.name+'</h3><p>📍 '+r.loc+' &nbsp;·&nbsp; ⭐ '+r.rating+' &nbsp;·&nbsp; 🕐 '+r.time+' min</p></div>';
-  let html='';
-  for(const [cat,items] of Object.entries(r.menu)){
-    html+='<div class="menu-cat"><div class="menu-cat-title">'+cat+'</div>';
-    for(const item of items){
-      const q=cart[item.id]?cart[item.id].qty:0;
-      html+='<div class="menu-item">'
-        +'<div class="item-left">'
-        +'<div class="vdot '+(item.veg?'veg':'nonveg')+'"></div>'
-        +'<div><div class="item-name">'+item.name+'</div><div class="item-desc">'+item.desc+'</div></div>'
-        +'</div>'
-        +'<div class="item-price">₹'+item.price+'</div>'
-        +'<div class="qty-ctrl">'
-        +'<button class="qty-btn" onclick="chgQty('+item.id+',-1)">−</button>'
-        +'<div class="qty-num" id="q'+item.id+'">'+q+'</div>'
-        +'<button class="qty-btn" onclick="chgQty('+item.id+',1)">+</button>'
-        +'</div>'
-        +'</div>';
+function renderMenu() {
+  const r = selRest;
+  document.getElementById('menuHdr').innerHTML =
+    '<div class="menu-emoji">' + r.emoji + '</div>' +
+    '<div><h3>' + r.name + '</h3><p>📍 ' + r.loc + ' &nbsp;·&nbsp; ⭐ ' + r.rating + ' &nbsp;·&nbsp; 🕐 ' + r.time + ' min</p></div>';
+  let html = '';
+  for (const [cat, items] of Object.entries(r.menu)) {
+    html += '<div class="menu-cat"><div class="menu-cat-title">' + cat + '</div>';
+    for (const item of items) {
+      const q = cart[item.id] ? cart[item.id].qty : 0;
+      html += '<div class="menu-item">'
+        + '<div class="item-left">'
+        + '<div class="vdot ' + (item.veg ? 'veg' : 'nonveg') + '"></div>'
+        + '<div><div class="item-name">' + item.name + '</div><div class="item-desc">' + item.desc + '</div></div>'
+        + '</div>'
+        + '<div class="item-price">₹' + item.price + '</div>'
+        + '<div class="qty-ctrl">'
+        + '<button class="qty-btn" onclick="chgQty(' + item.id + ',-1)">−</button>'
+        + '<div class="qty-num" id="q' + item.id + '">' + q + '</div>'
+        + '<button class="qty-btn" onclick="chgQty(' + item.id + ',1)">+</button>'
+        + '</div>'
+        + '</div>';
     }
-    html+='</div>';
+    html += '</div>';
   }
-  document.getElementById('menuItems').innerHTML=html;
+  document.getElementById('menuItems').innerHTML = html;
 }
 
 // ═══════════════════════════════════════
 //  CART
 // ═══════════════════════════════════════
-function chgQty(id,delta){
-  const item=ITEM_MAP[id];
-  if(!item)return;
-  if(!cart[id])cart[id]={id,price:item.price,name:item.name,qty:0};
-  cart[id].qty=Math.max(0,cart[id].qty+delta);
-  if(cart[id].qty===0)delete cart[id];
-  const el=document.getElementById('q'+id);
-  if(el){
-    el.textContent=cart[id]?cart[id].qty:0;
-    el.style.transform='scale(1.5)';el.style.color='var(--orange)';
-    setTimeout(()=>{el.style.transform='';el.style.color='';},280);
+function chgQty(id, delta) {
+  const item = ITEM_MAP[id];
+  if (!item) return;
+  if (!cart[id]) cart[id] = {id, price:item.price, name:item.name, qty:0};
+  cart[id].qty = Math.max(0, cart[id].qty + delta);
+  if (cart[id].qty === 0) delete cart[id];
+  const el = document.getElementById('q' + id);
+  if (el) {
+    el.textContent = cart[id] ? cart[id].qty : 0;
+    el.style.transform = 'scale(1.5)'; el.style.color = 'var(--orange)';
+    setTimeout(() => { el.style.transform = ''; el.style.color = ''; }, 280);
   }
   updateCartUI();
 }
 
-function updateCartUI(){
-  const items=Object.values(cart);
-  const totalQ=items.reduce((s,i)=>s+i.qty,0);
-  const totalP=items.reduce((s,i)=>s+i.qty*i.price,0);
-  document.getElementById('cartCount').textContent=totalQ+' item'+(totalQ!==1?'s':'');
-  document.getElementById('cartTotal').textContent='₹'+totalP;
-  const fc=document.getElementById('floatCart');
-  totalQ>0?fc.classList.add('show'):fc.classList.remove('show');
+function updateCartUI() {
+  const items = Object.values(cart);
+  const totalQ = items.reduce((s,i) => s + i.qty, 0);
+  const totalP = items.reduce((s,i) => s + i.qty * i.price, 0);
+  document.getElementById('cartCount').textContent = totalQ + ' item' + (totalQ !== 1 ? 's' : '');
+  document.getElementById('cartTotal').textContent = '₹' + totalP;
+  const fc = document.getElementById('floatCart');
+  totalQ > 0 ? fc.classList.add('show') : fc.classList.remove('show');
 }
 
 // ═══════════════════════════════════════
 //  ADDRESS
 // ═══════════════════════════════════════
-function goToAddress(){
-  const items=Object.values(cart);
-  if(!items.length){toast('Empty Cart','Add at least one item first!',true);return;}
-  if(!selCust){toast('Not Logged In','Please login first.',true);return;}
+function goToAddress() {
+  if (!Object.values(cart).length) { toast('Empty Cart','Add at least one item first!',true); return; }
+  if (!selCust) { toast('Not Logged In','Please login first.',true); return; }
   document.getElementById('menuPanel').classList.add('hidden');
   document.getElementById('addressPanel').classList.remove('hidden');
   setStep(3);
   renderAddrList();
-  document.getElementById('addressPanel').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('addressPanel').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function renderAddrList(){
-  const addrs=USER_ADDRESSES[selCust.id]||[];
-  if(!selAddrId&&addrs.length)selAddrId=addrs[0].id;
-  if(!addrs.length){
-    document.getElementById('addrList').innerHTML='<p style="color:var(--muted);font-size:.85rem;padding:8px 0;">No saved addresses yet. Add one below.</p>';
+function renderAddrList() {
+  const addrs = USER_ADDRESSES[selCust.id] || [];
+  if (!selAddrId && addrs.length) selAddrId = addrs[0].id;
+  if (!addrs.length) {
+    document.getElementById('addrList').innerHTML = '<p style="color:var(--muted);font-size:.85rem;padding:8px 0;">No saved addresses. Add one below.</p>';
     document.getElementById('newAddrForm').classList.remove('hidden');
     return;
   }
-  document.getElementById('addrList').innerHTML=addrs.map(a=>`
-    <div class="addr-card ${a.id===selAddrId?'selected':''}" id="acard${a.id}" onclick="selectAddr(${a.id})">
+  document.getElementById('addrList').innerHTML = addrs.map(a => `
+    <div class="addr-card ${a.id === selAddrId ? 'selected' : ''}" onclick="selectAddr(${a.id})">
       <div class="addr-icon">${a.icon}</div>
       <div style="flex:1;">
         <div class="addr-label">${a.type}</div>
         <div class="addr-text">${a.flat}, ${a.street}<br>${a.city} – ${a.pin}</div>
       </div>
-      ${a.id===selAddrId?'<div style="color:var(--green);font-size:.8rem;font-weight:600;">✓ Selected</div>':''}
+      ${a.id === selAddrId ? '<div style="color:var(--green);font-size:.8rem;font-weight:600;">✓ Selected</div>' : ''}
     </div>`).join('');
 }
 
-function selectAddr(id){selAddrId=id;renderAddrList();}
+function selectAddr(id) { selAddrId = id; renderAddrList(); }
 
-function toggleNewAddrForm(){
-  const f=document.getElementById('newAddrForm');
+function toggleNewAddrForm() {
+  const f = document.getElementById('newAddrForm');
   f.classList.toggle('hidden');
-  document.getElementById('newAddrToggle').innerHTML=f.classList.contains('hidden')
-    ?'<span style="font-size:1.2rem;">＋</span> Add a new address'
-    :'<span style="font-size:1.2rem;">−</span> Cancel';
+  document.getElementById('newAddrToggle').innerHTML = f.classList.contains('hidden')
+    ? '<span style="font-size:1.2rem;">＋</span> Add a new address'
+    : '<span style="font-size:1.2rem;">−</span> Cancel';
 }
 
-function setAddrType(btn,type){
-  document.querySelectorAll('.addr-type-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');addrTypeVal=type;
+function setAddrType(btn, type) {
+  document.querySelectorAll('.addr-type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); addrTypeVal = type;
 }
 
-function saveNewAddress(){
-  const flat=document.getElementById('addrFlat').value.trim();
-  const street=document.getElementById('addrStreet').value.trim();
-  const city=document.getElementById('addrCity').value.trim();
-  const pincode=document.getElementById('addrPincode').value.trim();
-  if(!flat||!street){toast('Missing Info','Please fill flat and street details.',true);return;}
-  if(!/^[0-9]{6}$/.test(pincode)){toast('Invalid Pincode','Enter a valid 6-digit pincode.',true);return;}
-  const icons={Home:'🏠',Work:'💼',Other:'📌'};
-  if(!USER_ADDRESSES[selCust.id])USER_ADDRESSES[selCust.id]=[];
-  const newId=Date.now();
-  const newAddr={id:newId,type:addrTypeVal,icon:icons[addrTypeVal],flat,street,city,pin:pincode};
+function saveNewAddress() {
+  const flat    = document.getElementById('addrFlat').value.trim();
+  const street  = document.getElementById('addrStreet').value.trim();
+  const city    = document.getElementById('addrCity').value.trim();
+  const pincode = document.getElementById('addrPincode').value.trim();
+  if (!flat || !street) { toast('Missing Info','Please fill flat and street.',true); return; }
+  if (!/^[0-9]{6}$/.test(pincode)) { toast('Invalid Pincode','Enter a valid 6-digit pincode.',true); return; }
+  const icons = {Home:'🏠',Work:'💼',Other:'📌'};
+  if (!USER_ADDRESSES[selCust.id]) USER_ADDRESSES[selCust.id] = [];
+  const newId = Date.now();
+  const newAddr = {id:newId, type:addrTypeVal, icon:icons[addrTypeVal], flat, street, city, pin:pincode};
   USER_ADDRESSES[selCust.id].push(newAddr);
-  selAddrId=newId;
-  fetch('http://localhost:3000/api/address',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({customerId:selCust.id,...newAddr})}).catch(()=>{});
-  ['addrFlat','addrStreet','addrPincode'].forEach(id=>document.getElementById(id).value='');
+  selAddrId = newId;
+  fetch(SERVER + '/api/address', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({customerId:selCust.id, ...newAddr})
+  }).catch(()=>{});
+  ['addrFlat','addrStreet','addrPincode'].forEach(i => document.getElementById(i).value = '');
   document.getElementById('newAddrForm').classList.add('hidden');
-  document.getElementById('newAddrToggle').innerHTML='<span style="font-size:1.2rem;">＋</span> Add a new address';
+  document.getElementById('newAddrToggle').innerHTML = '<span style="font-size:1.2rem;">＋</span> Add a new address';
   renderAddrList();
-  toast('Address Saved!',addrTypeVal+' address added successfully.');
+  toast('Address Saved!', addrTypeVal + ' address added successfully.');
 }
 
-function goToConfirm(){
-  if(!selAddrId){toast('Select Address','Please select a delivery address.',true);return;}
-  selPayMethod='UPI'; // reset
+function goToConfirm() {
+  if (!selAddrId) { toast('Select Address','Please select a delivery address.',true); return; }
+  selPayMethod = 'UPI';
   openBill();
 }
 
-function getSelAddr(){
-  return (USER_ADDRESSES[selCust.id]||[]).find(a=>a.id===selAddrId);
+function getSelAddr() {
+  return (USER_ADDRESSES[selCust.id] || []).find(a => a.id === selAddrId);
 }
 
 // ═══════════════════════════════════════
-//  BILL MODAL WITH PAYMENT SELECTION
+//  BILL MODAL
 // ═══════════════════════════════════════
-function openBill(){
-  const items=Object.values(cart);
-  if(!items.length)return;
-  const sub=items.reduce((s,i)=>s+i.qty*i.price,0);
-  const delivery=sub>300?0:30;
-  const gst=Math.round(sub*0.05);
-  const total=sub+delivery+gst;
-  const rows=items.map(i=>'<div class="bill-row"><span>'+i.name+' <span class="bill-qty">×'+i.qty+'</span></span><span>₹'+(i.qty*i.price)+'</span></div>').join('');
-  const addr=getSelAddr();
-  const addrHtml=addr?'<div style="background:var(--surface);border-radius:9px;padding:10px 14px;font-size:.8rem;color:var(--muted);margin-bottom:14px;display:flex;gap:8px;"><span>'+addr.icon+'</span><span><strong style="color:var(--text)">'+addr.type+'</strong> · '+addr.flat+', '+addr.street+', '+addr.city+' '+addr.pin+'</span></div>':'';
+function openBill() {
+  const items = Object.values(cart);
+  if (!items.length) return;
+  const sub = items.reduce((s,i) => s + i.qty * i.price, 0);
+  const delivery = sub > 300 ? 0 : 30;
+  const gst = Math.round(sub * 0.05);
+  const total = sub + delivery + gst;
+  const rows = items.map(i => '<div class="bill-row"><span>' + i.name + ' <span class="bill-qty">×' + i.qty + '</span></span><span>₹' + (i.qty * i.price) + '</span></div>').join('');
+  const addr = getSelAddr();
+  const addrHtml = addr ? '<div style="background:var(--surface);border-radius:9px;padding:10px 14px;font-size:.8rem;color:var(--muted);margin-bottom:14px;display:flex;gap:8px;"><span>' + addr.icon + '</span><span><strong style="color:var(--text)">' + addr.type + '</strong> · ' + addr.flat + ', ' + addr.street + ', ' + addr.city + ' ' + addr.pin + '</span></div>' : '';
 
-  document.getElementById('modalContent').innerHTML=`
+  document.getElementById('modalContent').innerHTML = `
     <div class="modal-icon">🧾</div>
     <h2>Review Your Order</h2>
     <p class="sub">From <strong>${selRest.name}</strong> for <strong>${selCust.name}</strong></p>
@@ -943,7 +1033,6 @@ function openBill(){
     <div class="tax-row"><span>Delivery fee</span><span>${delivery===0?'<span style="color:var(--green)">FREE</span>':'₹'+delivery}</span></div>
     <div class="tax-row"><span>GST (5%)</span><span>₹${gst}</span></div>
     <div class="bill-total"><span>Grand Total</span><span class="amt">₹${total}</span></div>
-
     <div class="pay-section">
       <div class="pay-label">💳 Choose Payment Method</div>
       <div class="pay-methods" id="payMethods">
@@ -965,48 +1054,50 @@ function openBill(){
         </div>
       </div>
     </div>
-
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-place" id="placeBtn" onclick="placeOrder(${total})">🚀 Place Order</button>
     </div>`;
-
   document.getElementById('overlay').classList.remove('hidden');
   setStep(5);
 }
 
-function selectPayMethod(method){
-  selPayMethod=method;
-  document.querySelectorAll('.pay-method').forEach(el=>el.classList.remove('selected'));
-  document.getElementById('pm-'+method).classList.add('selected');
+function selectPayMethod(method) {
+  selPayMethod = method;
+  document.querySelectorAll('.pay-method').forEach(el => el.classList.remove('selected'));
+  document.getElementById('pm-' + method).classList.add('selected');
 }
 
-function closeModal(){document.getElementById('overlay').classList.add('hidden');}
+function closeModal() { document.getElementById('overlay').classList.add('hidden'); }
 
 // ═══════════════════════════════════════
 //  PLACE ORDER
 // ═══════════════════════════════════════
-async function placeOrder(total){
-  const btn=document.getElementById('placeBtn');
-  btn.innerHTML='<span class="spinner"></span> Placing...';
-  btn.disabled=true;
-  const payload={
-    customerId:selCust.id,restaurantId:selRest.id,
-    orderDate:document.getElementById('orderDate').value,
-    paymentMethod:selPayMethod,
-    cart:Object.values(cart).map(i=>({id:i.id,qty:i.qty,price:i.price}))
+async function placeOrder(total) {
+  const btn = document.getElementById('placeBtn');
+  btn.innerHTML = '<span class="spinner"></span> Placing...';
+  btn.disabled = true;
+  const payload = {
+    customerId: selCust.id, restaurantId: selRest.id,
+    orderDate: document.getElementById('orderDate').value,
+    paymentMethod: selPayMethod,
+    cart: Object.values(cart).map(i => ({id:i.id, qty:i.qty, price:i.price}))
   };
-  let orderId=Math.floor(Math.random()*9000+1000);
-  try{
-    const res=await fetch('http://localhost:3000/api/place-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    if(res.ok){const d=await res.json();orderId=d.orderId||orderId;}
-  }catch(e){}
-  showSuccess(orderId,total);
+  let orderId = Math.floor(Math.random() * 9000 + 1000);
+  try {
+    const res = await fetch(SERVER + '/api/place-order', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(6000)
+    });
+    if (res.ok) { const d = await res.json(); orderId = d.orderId || orderId; }
+  } catch(e) {}
+  showSuccess(orderId, total);
 }
 
-function showSuccess(orderId,total){
-  const payIcons={UPI:'📱',Cash:'💵',Card:'💳',Wallet:'👛'};
-  document.getElementById('modalContent').innerHTML=`
+function showSuccess(orderId, total) {
+  const payIcons = {UPI:'📱',Cash:'💵',Card:'💳',Wallet:'👛'};
+  document.getElementById('modalContent').innerHTML = `
     <div class="success-wrap">
       <div class="check-circle">✓</div>
       <h2 style="color:var(--green)">Order Placed! 🎉</h2>
@@ -1019,11 +1110,11 @@ function showSuccess(orderId,total){
       </div>
       <button class="btn-place" style="width:100%" onclick="finishOrder()">Done ✓</button>
     </div>`;
-  cart={};updateCartUI();
-  toast('Order Confirmed!',selRest.name+' is cooking your food!');
+  cart = {}; updateCartUI();
+  toast('Order Confirmed!', selRest.name + ' is cooking your food!');
 }
 
-function finishOrder(){
+function finishOrder() {
   closeModal();
   document.getElementById('addressPanel').classList.add('hidden');
   goBack();
@@ -1032,158 +1123,150 @@ function finishOrder(){
 // ═══════════════════════════════════════
 //  STEP INDICATOR
 // ═══════════════════════════════════════
-function setStep(n){
-  for(let i=1;i<=5;i++){
-    const el=document.getElementById('step'+i);
-    if(!el)continue;
+function setStep(n) {
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('step' + i);
+    if (!el) continue;
     el.classList.remove('active','done');
-    if(i<n){el.classList.add('done');el.querySelector('.step-num').textContent='✓';}
-    else if(i===n){el.classList.add('active');if(i>1)el.querySelector('.step-num').textContent=i;}
-    else{el.querySelector('.step-num').textContent=i;}
+    if (i < n) { el.classList.add('done'); el.querySelector('.step-num').textContent = '✓'; }
+    else if (i === n) { el.classList.add('active'); if (i > 1) el.querySelector('.step-num').textContent = i; }
+    else { el.querySelector('.step-num').textContent = i; }
   }
 }
 
 // ═══════════════════════════════════════
-//  ANALYTICS
+//  ANALYTICS — always tries live DB first
 // ═══════════════════════════════════════
-async function loadAnalytics(btn,qid){
-  document.querySelectorAll('.a-tab').forEach(b=>b.classList.remove('active'));
+async function loadAnalytics(btn, qid) {
+  document.querySelectorAll('.a-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  const card=document.getElementById('aCard');
-  card.innerHTML='<div class="a-empty"><span class="big">⏳</span>Running query...</div>';
+  const card = document.getElementById('aCard');
+  card.innerHTML = '<div class="a-empty"><span class="big">⏳</span>Running query...</div>';
 
-  let data;
-  try{
-    const res=await fetch('http://localhost:3000/api/'+API[qid]);
-    if(!res.ok)throw new Error();
-    data=await res.json();
-    if(data.error)throw new Error(data.error);
-  }catch{
-    await new Promise(r=>setTimeout(r,400));
-    data=MOCK[qid];
+  const { data, source } = await fetchAnalytics(qid);
+
+  if (!data || !data.length) {
+    card.innerHTML = '<div class="a-empty"><span class="big">📭</span>No results found.</div>';
+    return;
   }
 
-  if(!data||!data.length){card.innerHTML='<div class="a-empty"><span class="big">📭</span>No results found.</div>';return;}
-  card.innerHTML=buildTable(qid,data);
+  const sourceTag = source === 'live'
+    ? '<span style="color:var(--green);font-size:.75rem;font-weight:600;">✅ Live DB data</span>'
+    : '<span style="color:var(--yellow);font-size:.75rem;font-weight:600;">⚠️ Demo data (start node server.js for live)</span>';
+
+  card.innerHTML = '<div style="padding:10px 16px 4px;border-bottom:1px solid var(--card-border);">' + sourceTag + '</div>' + buildTable(qid, data);
 }
 
-function buildTable(qid,data){
-  let headCols=[],rows='';
-  if(qid==='q1'){
-    headCols=['Rank','Restaurant Name','Avg Rating','Total Revenue'];
-    rows=data.map((r,i)=>'<tr style="animation:fadeUp .35s ease '+(i*.07)+'s both">'
-      +'<td><span class="medal">'+(MEDALS[i]||'#'+(i+1))+'</span></td>'
-      +'<td><strong>'+r.RestaurantName+'</strong></td>'
-      +'<td><span style="color:var(--yellow);font-weight:700;">'+r.AvgRating+' ⭐</span></td>'
-      +'<td class="hl">₹'+Number(r.TotalRevenue).toLocaleString('en-IN')+'</td>'
-      +'</tr>').join('');
-  } else if(qid==='q2'){
-    // Build heatmap: rows = restaurants, cols = days of week
-    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const dayShort={Sunday:'Sun',Monday:'Mon',Tuesday:'Tue',Wednesday:'Wed',Thursday:'Thu',Friday:'Fri',Saturday:'Sat'};
-    const dayEmojis={Sunday:'☀️',Saturday:'🎉',Friday:'🍕',Monday:'😴',Tuesday:'📦',Wednesday:'🌿',Thursday:'⚡'};
-    // Build lookup: restaurant -> day -> orders
-    const map={};
-    data.forEach(r=>{
-      if(!map[r.RestaurantName]) map[r.RestaurantName]={};
-      map[r.RestaurantName][r.DayOfWeek]=r.TotalOrders;
+// ═══════════════════════════════════════
+//  BUILD TABLE
+// ═══════════════════════════════════════
+function buildTable(qid, data) {
+  let headCols = [], rows = '';
+
+  if (qid === 'q1') {
+    headCols = ['Rank','Restaurant Name','Avg Rating','Total Revenue'];
+    rows = data.map((r,i) => '<tr>'
+      + '<td><span class="medal">' + (MEDALS[i]||'#'+(i+1)) + '</span></td>'
+      + '<td><strong>' + r.RestaurantName + '</strong></td>'
+      + '<td><span style="color:var(--yellow);font-weight:700;">⭐ ' + r.AvgRating + '</span></td>'
+      + '<td class="hl">₹' + Number(r.TotalRevenue).toLocaleString('en-IN') + '</td>'
+      + '</tr>').join('');
+
+  } else if (qid === 'q2') {
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const dayShort = {Sunday:'Sun',Monday:'Mon',Tuesday:'Tue',Wednesday:'Wed',Thursday:'Thu',Friday:'Fri',Saturday:'Sat'};
+    const dayEmojis = {Sunday:'☀️',Saturday:'🎉',Friday:'🍕',Monday:'😴',Tuesday:'📦',Wednesday:'🌿',Thursday:'⚡'};
+    const map = {};
+    data.forEach(r => {
+      if (!map[r.RestaurantName]) map[r.RestaurantName] = {};
+      map[r.RestaurantName][r.DayOfWeek] = r.TotalOrders;
     });
-    const restaurants=Object.keys(map);
-    const allVals=data.map(d=>d.TotalOrders);
-    const maxVal=Math.max(...allVals);
-    // Header row
-    const ths=['<th>Restaurant</th>',...days.map(d=>'<th style="text-align:center;font-size:.7rem;">'+dayEmojis[d]+'<br>'+dayShort[d]+'</th>')].join('');
-    // Data rows
-    rows=restaurants.map((rest,i)=>{
-      const rowMax=Math.max(...days.map(d=>map[rest][d]||0));
-      const cells=days.map(d=>{
-        const val=map[rest][d]||0;
-        const isPeak=val===rowMax&&val>0;
-        const intensity=maxVal>0?val/maxVal:0;
-        const bg=val===0
-          ?'background:rgba(255,255,255,.03);'
-          :'background:rgba(255,87,34,'+( 0.1 + intensity*0.55)+');';
-        const border=isPeak?'border:1.5px solid var(--orange);':'border:1px solid transparent;';
-        const textColor=isPeak?'color:white;font-weight:700;':'color:var(--text);';
-        return '<td style="text-align:center;padding:10px 6px;border-radius:6px;font-size:.85rem;'+bg+border+textColor+'">'
-          +(val>0?val:'—')+'</td>';
+    const restaurants = Object.keys(map);
+    const allVals = data.map(d => d.TotalOrders);
+    const maxVal = Math.max(...allVals);
+    const ths = ['<th>Restaurant</th>', ...days.map(d => '<th style="text-align:center;font-size:.7rem;">' + dayEmojis[d] + '<br>' + dayShort[d] + '</th>')].join('');
+    rows = restaurants.map(rest => {
+      const rowMax = Math.max(...days.map(d => map[rest][d] || 0));
+      const cells = days.map(d => {
+        const val = map[rest][d] || 0;
+        const isPeak = val === rowMax && val > 0;
+        const intensity = maxVal > 0 ? val / maxVal : 0;
+        const bg = val === 0 ? 'background:rgba(255,255,255,.03);' : 'background:rgba(255,87,34,' + (0.1 + intensity * 0.55) + ');';
+        const border = isPeak ? 'border:1.5px solid var(--orange);' : 'border:1px solid transparent;';
+        const textColor = isPeak ? 'color:white;font-weight:700;' : 'color:var(--text);';
+        return '<td style="text-align:center;padding:10px 6px;border-radius:6px;font-size:.85rem;' + bg + border + textColor + '">' + (val > 0 ? val : '—') + '</td>';
       }).join('');
-      return '<tr style="animation:fadeUp .35s ease '+(i*.07)+'s both">'
-        +'<td><strong>'+rest+'</strong></td>'
-        +cells
-        +'</tr>';
+      return '<tr><td><strong>' + rest + '</strong></td>' + cells + '</tr>';
     }).join('');
-    // Override headCols with custom header
     return '<div class="a-card-inner"><table class="dtable" style="min-width:580px;">'
-      +'<thead><tr>'+ths+'</tr></thead>'
-      +'<tbody>'+rows+'</tbody>'
-      +'</table>'
-      +'<div style="padding:10px 16px;font-size:.75rem;color:var(--muted);border-top:1px solid var(--card-border);">🔶 Highlighted cell = peak day for that restaurant &nbsp;·&nbsp; Darker orange = more orders</div>'
-      +'</div>';
-  } else if(qid==='q3'){
-    const maxQ=Math.max(...data.map(d=>d.TotalOrdered));
-    headCols=['Rank','Food Item','Restaurant','Total Ordered'];
-    rows=data.map((r,i)=>{
-      const pct=Math.round((r.TotalOrdered/maxQ)*100);
-      return '<tr style="animation:fadeUp .35s ease '+(i*.07)+'s both">'
-        +'<td><span class="medal">'+(MEDALS[i]||'#'+(i+1))+'</span></td>'
-        +'<td><strong>'+r.FoodItem+'</strong></td>'
-        +'<td style="color:var(--muted);font-size:.82rem;">'+r.RestaurantName+'</td>'
-        +'<td><div class="rbar"><span style="color:var(--orange);font-weight:700;min-width:28px;display:inline-block;">'+r.TotalOrdered+'</span><div class="rbar-track"><div class="rbar-fill" style="width:'+pct+'%"></div></div></div></td>'
-        +'</tr>';
+      + '<thead><tr>' + ths + '</tr></thead><tbody>' + rows + '</tbody></table>'
+      + '<div style="padding:10px 16px;font-size:.75rem;color:var(--muted);border-top:1px solid var(--card-border);">🔶 Highlighted = peak day · Darker orange = more orders</div>'
+      + '</div>';
+
+  } else if (qid === 'q3') {
+    const maxQ = Math.max(...data.map(d => d.TotalOrdered));
+    headCols = ['Rank','Food Item','Restaurant','Total Ordered'];
+    rows = data.map((r,i) => {
+      const pct = Math.round((r.TotalOrdered / maxQ) * 100);
+      return '<tr>'
+        + '<td><span class="medal">' + (MEDALS[i]||'#'+(i+1)) + '</span></td>'
+        + '<td><strong>' + r.FoodItem + '</strong></td>'
+        + '<td style="color:var(--muted);font-size:.82rem;">' + r.RestaurantName + '</td>'
+        + '<td><div class="rbar"><span style="color:var(--orange);font-weight:700;min-width:28px;">' + r.TotalOrdered + '</span><div class="rbar-track"><div class="rbar-fill" style="width:' + pct + '%"></div></div></div></td>'
+        + '</tr>';
     }).join('');
-  } else if(qid==='q4'){
-    const maxO=Math.max(...data.map(d=>d.OrdersThisMonth));
-    headCols=['Rank','Customer','Orders This Month','Monthly Spend','Last Order'];
-    rows=data.map((r,i)=>{
-      const pctO=Math.round((r.OrdersThisMonth/maxO)*100);
-      // Clean date formatting — handle both ISO strings and plain date strings
-      const rawDate=r.LastOrderDate||'';
-      let cleanDate='—';
-      if(rawDate){
-        const d=new Date(rawDate);
-        if(!isNaN(d)){
-          cleanDate=d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-        } else {
-          cleanDate=rawDate.split('T')[0]; // fallback: just show YYYY-MM-DD
-        }
+
+  } else if (qid === 'q4') {
+    const maxO = Math.max(...data.map(d => d.OrdersThisMonth));
+    headCols = ['Rank','Customer','Orders This Month','Monthly Spend','Last Order'];
+    rows = data.map((r,i) => {
+      const pctO = Math.round((r.OrdersThisMonth / maxO) * 100);
+      const rawDate = r.LastOrderDate || '';
+      let cleanDate = '—';
+      if (rawDate) {
+        const d = new Date(rawDate);
+        if (!isNaN(d)) cleanDate = d.toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'});
+        else cleanDate = rawDate.split('T')[0];
       }
-      return '<tr style="animation:fadeUp .35s ease '+(i*.07)+'s both">'
-        +'<td><span class="medal">'+(MEDALS[i]||'#'+(i+1))+'</span></td>'
-        +'<td><strong>'+r.CustomerName+'</strong></td>'
-        +'<td><div class="rbar"><span style="color:var(--orange);font-weight:700;min-width:18px;">'+r.OrdersThisMonth+'</span><div class="rbar-track"><div class="rbar-fill" style="width:'+pctO+'%"></div></div></div></td>'
-        +'<td class="hl">₹'+Number(r.MonthlySpend).toLocaleString('en-IN')+'</td>'
-        +'<td style="color:var(--muted);font-size:.82rem;">'+cleanDate+'</td>'
-        +'</tr>';
+      return '<tr>'
+        + '<td><span class="medal">' + (MEDALS[i]||'#'+(i+1)) + '</span></td>'
+        + '<td><strong>' + r.CustomerName + '</strong></td>'
+        + '<td><div class="rbar"><span style="color:var(--orange);font-weight:700;min-width:18px;">' + r.OrdersThisMonth + '</span><div class="rbar-track"><div class="rbar-fill" style="width:' + pctO + '%"></div></div></div></td>'
+        + '<td class="hl">₹' + Number(r.MonthlySpend).toLocaleString('en-IN') + '</td>'
+        + '<td style="color:var(--muted);font-size:.82rem;">' + cleanDate + '</td>'
+        + '</tr>';
     }).join('');
-  } else if(qid==='q5'){
-    const maxD=Math.max(...data.map(d=>d.Deliveries));
-    headCols=['Rank','Delivery Partner','Deliveries This Month','Performance'];
-    rows=data.map((r,i)=>{
-      const pct=Math.round((r.Deliveries/maxD)*100);
-      return '<tr style="animation:fadeUp .35s ease '+(i*.07)+'s both">'
-        +'<td><span class="medal">'+(MEDALS[i]||'#'+(i+1))+'</span></td>'
-        +'<td><strong>🚴 '+r.DeliveryManName+'</strong></td>'
-        +'<td style="color:var(--orange);font-weight:700;">'+r.Deliveries+' deliveries</td>'
-        +'<td><div class="pbar-track"><div class="pbar-fill" style="width:'+pct+'%"></div></div></td>'
-        +'</tr>';
+
+  } else if (qid === 'q5') {
+    const maxD = Math.max(...data.map(d => d.Deliveries));
+    headCols = ['Rank','Delivery Partner','Vehicle','Deliveries','Performance'];
+    rows = data.map((r,i) => {
+      const pct = Math.round((r.Deliveries / maxD) * 100);
+      return '<tr>'
+        + '<td><span class="medal">' + (MEDALS[i]||'#'+(i+1)) + '</span></td>'
+        + '<td><strong>🚴 ' + r.DeliveryManName + '</strong></td>'
+        + '<td style="color:var(--muted);font-size:.82rem;">🛵 ' + (r.VehicleType||'Bike') + '</td>'
+        + '<td style="color:var(--orange);font-weight:700;">' + r.Deliveries + '</td>'
+        + '<td><div class="pbar-track"><div class="pbar-fill" style="width:' + pct + '%"></div></div></td>'
+        + '</tr>';
     }).join('');
   }
-  const ths=headCols.map(h=>'<th>'+h+'</th>').join('');
-  return '<div class="a-card-inner"><table class="dtable"><thead><tr>'+ths+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
+
+  const ths = headCols.map(h => '<th>' + h + '</th>').join('');
+  return '<div class="a-card-inner"><table class="dtable"><thead><tr>' + ths + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
 }
 
 // ═══════════════════════════════════════
 //  TOAST
 // ═══════════════════════════════════════
-function toast(title,msg,err=false){
-  const t=document.getElementById('toast');
-  t.style.borderLeftColor=err?'#FF1744':'var(--orange)';
-  document.getElementById('toastTitle').textContent=title;
-  document.getElementById('toastMsg').textContent=msg;
+function toast(title, msg, err=false) {
+  const t = document.getElementById('toast');
+  t.style.borderLeftColor = err ? '#FF1744' : 'var(--orange)';
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3400);
+  setTimeout(() => t.classList.remove('show'), 3400);
 }
 </script>
 </body>
